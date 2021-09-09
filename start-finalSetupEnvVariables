@@ -13,6 +13,9 @@ if isTrue "${REPLACE_ENV_VARIABLES}"; then
     fileExcludes="${fileExcludes} -not -name $f"
   done
 
+  # Directory includes
+  dirIncludes=${REPLACE_ENV_VARIABLES_INCLUDE_PATHS:-/data/}
+
   # Directory excludes (recursive)
   dirExcludes=$(join_by " -o -path " ${REPLACE_ENV_VARIABLES_EXCLUDE_PATHS})
   if [[ $dirExcludes ]]; then
@@ -38,7 +41,7 @@ if isTrue "${REPLACE_ENV_VARIABLES}"; then
     value=${value//\\/\\\\}
     value=${value//#/\\#}
 
-    find /data/ \
+    find $dirIncludes \
         $dirExcludes \
         -type f \
         \( -name "*.yml" -or -name "*.yaml" -or -name "*.txt" -or -name "*.cfg" \
